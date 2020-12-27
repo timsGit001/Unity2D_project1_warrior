@@ -2,6 +2,7 @@
 
 public class Car : MonoBehaviour
 {
+    #region Practice Fields
     /* 基本設定 */
     [Header("基本設定")]
     [Tooltip("汽車高度(公尺)"), Min(1)]
@@ -35,4 +36,28 @@ public class Car : MonoBehaviour
     private Sprite painting;                             // 造型噴漆
     [Tooltip("特色樂"), SerializeField]
     private AudioClip bgm;                               // 特色樂
+    #endregion
+
+    #region Practice Funcs
+
+    /// <summary>
+    /// 發出聲音
+    /// </summary>
+    /// <param name="sound">狀聲詞</param>
+    /// <param name="num">重複次數</param>
+    private void Echo(string sound="叭叭", uint num=1) {
+        for (uint i =0; i < num;i++) {
+            print(sound);
+        }
+    }
+
+    private void Start()
+    {
+        print("品牌:" + brand + "\n 顏色:" + color);
+
+        Echo(num: 2);
+        Echo("噗噗");
+        Echo(sound:"顆顆");
+    }
+    #endregion
 }
