@@ -25,18 +25,31 @@ public class Player : MonoBehaviour
     public AudioClip shootAudio;     // 開槍音效
 
     /* 私人 設定 */
-    private AudioSource m_audioSource; // 音效來源
-    private Rigidbody2D m_rigidbody2D; // 2D 剛體
-    private Animator m_animator;       // 動畫控制器
+    private AudioSource m_audioSource;       // 音效來源
+    private Rigidbody2D m_rigidbody2D;       // 2D 剛體
+    private Animator m_animator;             // 動畫控制器
+    private SpriteRenderer m_spriteRenderer; // 圖片相關
+    private float h; // 水平控制量值
+    private float v; // 垂直控制量值
     #endregion
 
-#region 角色基本功能
+    #region 角色基本功能
     /// <summary>
     /// 移動
     /// </summary>
     private void DoMove()
     {
-        
+        // 物理移動
+        m_rigidbody2D.velocity = new Vector2(h* moveSpeed, m_rigidbody2D.velocity.y);
+
+        // 移動動畫
+        m_animator.SetBool("runSwitch", h != 0);
+
+        // 圖片面向
+        if (h > 0)
+            m_spriteRenderer.flipX = false;
+        else if (h < 0)
+            m_spriteRenderer.flipX = true;
     }
 
     /// <summary>
@@ -76,14 +89,32 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        m_rigidbody2D = GetComponent<Rigidbody2D>();
+        m_animator = GetComponent<Animator>();
+        m_spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        GetHorizontal();
+        DoMove();
+        GetVertical();
     }
 
+    /// <summary>
+    /// 取得 水平控制量值
+    /// </summary>
+    private void GetHorizontal() {
+        h = Input.GetAxis("Horizontal");
+    }
 
+    /// <summary>
+    /// 取得 垂直控制量值
+    /// </summary>
+    private void GetVertical()
+    {
+        v = Input.GetAxis("Vertical");
+        m_animator.SetFloat("jumping", v);
+    }
 }
