@@ -2291,9 +2291,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10.5
-  jumpHeight: 100
-  isOnFloor: 0
+  jumpHeight: 600
+  isOnFloor: 1
   hp: 100
+  offset: {x: 0, y: -0.95, z: 0}
+  radius: 0.2
   bullet: {fileID: 0}
   bulletBirthLoc: {fileID: 0}
   bulletSpeed: 800
@@ -2332,8 +2334,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0030214787, y: -0.14802456}
-  m_Size: {x: 0.5210252, y: 1.4958882}
+  m_Offset: {x: 0, y: -0.15}
+  m_Size: {x: 0.52, y: 1.5}
   m_Direction: 0
 --- !u!1 &1511026148
 GameObject:
@@ -2506,7 +2508,7 @@ GameObject:
   - component: {fileID: 1691928125}
   - component: {fileID: 1691928127}
   - component: {fileID: 1691928126}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: floors
   m_TagString: Untagged
   m_Icon: {fileID: 0}

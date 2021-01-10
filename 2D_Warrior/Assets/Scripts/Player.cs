@@ -2,17 +2,21 @@
 
 public class Player : MonoBehaviour
 {
-# region 角色設定
+    #region 角色設定
     /* 公開 設定 */
     // 角色相關
-    [Header("移動速度"), Range(0,1000)]
-    public float moveSpeed  = 10.5f; // 移動速度
+    [Header("移動速度"), Range(0, 1000)]
+    public float moveSpeed = 10.5f; // 移動速度
     [Header("跳躍高度"), Range(0, 3000)]
-    public int jumpHeight  = 100;    // 跳躍高度
+    public int jumpHeight = 100;    // 跳躍高度
     [Header("是否在地板上"), Tooltip("是否在地板上?(是:T 否:F)")]
-    public bool isOnFloor  = false;  // 是否在地板上
+    public bool isOnFloor = true;  // 是否在地板上
     [Range(0, 200)]
     public float hp = 100;             // 血量
+    [Header("Gizmos Offset")]
+    public Vector3 offset;
+    [Header("Gizmos Radius")]
+    public float radius;
 
     // 武器相關
     [Header("子彈"), Tooltip("請提供子彈物件")]
@@ -35,29 +39,55 @@ public class Player : MonoBehaviour
 
     #region 角色基本功能
     /// <summary>
+    /// 在unity上繪製圖形 (玩家是看不到的)
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        // 調顏色
+        Gizmos.color = new Color(1, 0, 0, 0.35f);
+        // 以角色pos為中心 繪製半徑為1.0的球形
+        Gizmos.DrawSphere(transform.position + offset, radius);
+    }
+
+    /// <summary>
     /// 移動
     /// </summary>
     private void DoMove()
     {
         // 物理移動
-        m_rigidbody2D.velocity = new Vector2(h* moveSpeed, m_rigidbody2D.velocity.y);
+        m_rigidbody2D.velocity = new Vector2(h * moveSpeed, m_rigidbody2D.velocity.y);
 
         // 移動動畫
         m_animator.SetBool("runSwitch", h != 0);
 
-        // 圖片面向
-        if (h > 0)
-            m_spriteRenderer.flipX = false;
-        else if (h < 0)
-            m_spriteRenderer.flipX = true;
+        // 面向
+        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            transform.localEulerAngles = Vector3.zero;
+        else if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            transform.localEulerAngles = new Vector3(0, 180, 0);
     }
 
     /// <summary>
-    /// 跳耀
+    /// 跳躍
     /// </summary>
     private void DoJump()
     {
+        // [跳躍動作]
+        if (isOnFloor && Input.GetKeyDown(KeyCode.Space))
+        {
+            // 物理移動
+            m_rigidbody2D.AddForce(new Vector2(0, jumpHeight));
 
+            m_animator.SetFloat("jumping", 1.0f);
+        }
+
+        // [是否接觸地板]
+        // 取 以角色pos+offset為中心 半徑為1.0的圓形 與 第8層Layer(目前是設為地板的Layer)的碰撞
+        Collider2D hit = Physics2D.OverlapCircle(transform.position + offset, radius, 1 << 8);
+        isOnFloor = (hit!=null);
+
+        m_animator.SetFloat("jumping", m_rigidbody2D.velocity.y);
+        m_animator.SetBool("onFloor", isOnFloor);
     }
     /// <summary>
     /// 開槍
@@ -84,7 +114,7 @@ public class Player : MonoBehaviour
     {
 
     }
-#endregion
+    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -92,6 +122,7 @@ public class Player : MonoBehaviour
         m_rigidbody2D = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
         m_spriteRenderer = GetComponent<SpriteRenderer>();
+
     }
 
     // Update is called once per frame
@@ -99,22 +130,14 @@ public class Player : MonoBehaviour
     {
         GetHorizontal();
         DoMove();
-        GetVertical();
+        DoJump();
     }
 
     /// <summary>
     /// 取得 水平控制量值
     /// </summary>
-    private void GetHorizontal() {
-        h = Input.GetAxis("Horizontal");
-    }
-
-    /// <summary>
-    /// 取得 垂直控制量值
-    /// </summary>
-    private void GetVertical()
+    private void GetHorizontal()
     {
-        v = Input.GetAxis("Vertical");
-        m_animator.SetFloat("jumping", v);
+        h = Input.GetAxis("Horizontal");
     }
 }
