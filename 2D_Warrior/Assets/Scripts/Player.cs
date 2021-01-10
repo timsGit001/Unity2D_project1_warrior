@@ -58,7 +58,7 @@ public class Player : MonoBehaviour
         m_rigidbody2D.velocity = new Vector2(h * moveSpeed, m_rigidbody2D.velocity.y);
 
         // 移動動畫
-        m_animator.SetBool("runSwitch", h != 0);
+        m_animator.SetBool("runSwitch", (isOnFloor && h != 0));
 
         // 面向
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
@@ -72,13 +72,13 @@ public class Player : MonoBehaviour
     /// </summary>
     private void DoJump()
     {
-        // [跳躍動作]
+        // [判斷跳躍動作]
         if (isOnFloor && Input.GetKeyDown(KeyCode.Space))
         {
             // 物理移動
             m_rigidbody2D.AddForce(new Vector2(0, jumpHeight));
-
-            m_animator.SetFloat("jumping", 1.0f);
+            // 觸發跳躍動畫
+            m_animator.SetTrigger("doJump");
         }
 
         // [是否接觸地板]
@@ -86,6 +86,7 @@ public class Player : MonoBehaviour
         Collider2D hit = Physics2D.OverlapCircle(transform.position + offset, radius, 1 << 8);
         isOnFloor = (hit!=null);
 
+        // 設定動畫參數
         m_animator.SetFloat("jumping", m_rigidbody2D.velocity.y);
         m_animator.SetBool("onFloor", isOnFloor);
     }
