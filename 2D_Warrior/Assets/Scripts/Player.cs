@@ -32,7 +32,6 @@ public class Player : MonoBehaviour
     private AudioSource m_audioSource;       // 音效來源
     private Rigidbody2D m_rigidbody2D;       // 2D 剛體
     private Animator m_animator;             // 動畫控制器
-    private SpriteRenderer m_spriteRenderer; // 圖片相關
     private float h; // 水平控制量值
     private float v; // 垂直控制量值
     #endregion
@@ -47,6 +46,22 @@ public class Player : MonoBehaviour
         Gizmos.color = new Color(1, 0, 0, 0.35f);
         // 以角色pos為中心 繪製半徑為1.0的球形
         Gizmos.DrawSphere(transform.position + offset, radius);
+    }
+
+    /// <summary>
+    /// 事件之觸發
+    /// </summary>
+    /// <param name="collision"></param> 啟動觸發之Collider2D
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "TAG_KEY")
+        {   // 碰到的是 "鑰匙"
+            Destroy(collision.gameObject);
+        }
+        else if (collision.tag == "TAG_GATE")
+        {
+            // 碰到的是 "門"
+        }
     }
 
     /// <summary>
@@ -95,7 +110,21 @@ public class Player : MonoBehaviour
     /// </summary>
     private void DoShoot()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse0)) {
+            if (!m_animator.GetBool("equipSwd")) {
+                // 觸發 拔劍動畫
+                m_animator.SetBool("equipSwd", true);
+            } else {
+                // 觸發 攻擊
+                m_animator.SetTrigger("doAttack");
 
+                // 音效
+                m_audioSource.PlayOneShot(shootAudio, 1.5f);
+                // 生成
+                GameObject temp = Instantiate(bullet, bulletBirthLoc.position, bulletBirthLoc.rotation);
+                temp.GetComponent<Rigidbody2D>().AddForce(bulletBirthLoc.right * bulletSpeed + bulletBirthLoc.up * 50);
+            }
+        }
     }
 
     /// <summary>
@@ -122,8 +151,7 @@ public class Player : MonoBehaviour
     {
         m_rigidbody2D = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
-        m_spriteRenderer = GetComponent<SpriteRenderer>();
-
+        m_audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -132,6 +160,7 @@ public class Player : MonoBehaviour
         GetHorizontal();
         DoMove();
         DoJump();
+        DoShoot();
     }
 
     /// <summary>
