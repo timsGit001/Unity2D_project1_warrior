@@ -11,8 +11,10 @@ public class CameraCtrl2D : MonoBehaviour
     public Vector3 offset;
     [Header("鏡頭晃動間隔"), Range(0, 1)]
     public float shakeInterval = 0.05f;
-    [Header("鏡頭晃動"), Range(0, 5)]
+    [Header("鏡頭晃動值"), Range(0, 5)]
     public float shakeValue = 0.5f;
+    [Header("鏡頭晃動次數"), Range(0, 10)]
+    public int shakeCount = 3;
 
     private Vector3 nextPos;
     private bool faceToRight = true; // 鏡頭右邊保留多一點
@@ -56,9 +58,13 @@ public class CameraCtrl2D : MonoBehaviour
         transform.position = nextPos;
     }
 
+    /// <summary>
+    /// 鏡頭晃動效果
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator CamShake()
     {
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < shakeCount; i++)
         {
             transform.position += Vector3.up * shakeValue;
             yield return new WaitForSeconds(shakeInterval);

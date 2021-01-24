@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using System.Collections;
 
 // 第一次套用此腳本時，會自動添加的元件(一次RequireComponent可包含1~3個)
@@ -29,6 +30,9 @@ public class Enemy : MonoBehaviour
     [Header("血量圖片")]
     public Image imgHp;
 
+    [Header("死亡事件")]
+    public UnityEvent onDead;
+
     private AudioSource m_audioSource;       // 音效來源
     private Rigidbody2D m_rigidbody2D;       // 2D 剛體
     private Animator m_animator;             // 動畫控制器
@@ -51,11 +55,9 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (hp > 0)
-        {
-            DoMove();
-        }
+        if (m_animator.GetBool("dieSwitch")) return;
 
+        DoMove();
     }
 
     /// <summary>
@@ -119,7 +121,6 @@ public class Enemy : MonoBehaviour
             cdTimer = 0;
             StartCoroutine(DelayAttack());
         }
-
     }
 
     /// <summary>
@@ -155,6 +156,7 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void OnDeath()
     {
+        onDead.Invoke();
         hp = 0.0f;
         m_animator.SetBool("dieSwitch", true);
         m_rigidbody2D.Sleep();

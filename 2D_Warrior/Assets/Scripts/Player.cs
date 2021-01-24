@@ -170,9 +170,10 @@ public class Player : MonoBehaviour
     {
         hp = 0.0f;
         m_animator.SetBool("dieSwitch", true);
-        m_rigidbody2D.Sleep();
-        m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
-        GetComponent<CapsuleCollider2D>().enabled = false;
+        enabled = false;
+        //m_rigidbody2D.Sleep();
+        //m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+        //GetComponent<CapsuleCollider2D>().enabled = false;
     }
     #endregion
 
@@ -188,9 +189,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hp <= 0.0f)
-            return;
-
         GetHorizontal();
         DoMove();
         DoJump();

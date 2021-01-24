@@ -884,6 +884,12 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!1 &272520292 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2068944082273272260, guid: 5a9d528f9349b644c87c7ef7e544062d,
+    type: 3}
+  m_PrefabInstance: {fileID: 933487760}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &357513589
 GameObject:
   m_ObjectHideFlags: 0
@@ -1780,6 +1786,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Door_particle
+      objectReference: {fileID: 0}
+    - target: {fileID: 2068944082273272260, guid: 5a9d528f9349b644c87c7ef7e544062d,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2068944082273272267, guid: 5a9d528f9349b644c87c7ef7e544062d,
         type: 3}
@@ -3801,6 +3812,7 @@ MonoBehaviour:
   offset: {x: 5.5, y: 1.8, z: 0}
   shakeInterval: 0.05
   shakeValue: 0.5
+  shakeCount: 3
 --- !u!1 &1674027530
 GameObject:
   m_ObjectHideFlags: 0
@@ -23260,6 +23272,20 @@ MonoBehaviour:
   hp: 2500
   textHp: {fileID: 2054403946}
   imgHp: {fileID: 1092826161}
+  onDead:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 272520292}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &1767193940
 GameObject:
   m_ObjectHideFlags: 0
