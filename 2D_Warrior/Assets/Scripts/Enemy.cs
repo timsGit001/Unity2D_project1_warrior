@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 // 第一次套用此腳本時，會自動添加的元件(一次RequireComponent可包含1~3個)
 [RequireComponent(typeof(AudioSource), typeof(Rigidbody2D), typeof(CapsuleCollider2D))]
@@ -12,6 +13,14 @@ public class Enemy : MonoBehaviour
     public float atk = 20f;
     [Header("攻擊範圍"), Range(0, 50)]
     public float rangeAtk = 3f;
+    [Header("延遲幾秒攻擊"), Range(0, 5)]
+    public float delayTimeAtk = 0.7f;
+    [Header("攻擊CD"), Range(0, 10)]
+    public float cdTimeAtk = 3f;
+    [Header("攻擊範圍位移")]
+    public Vector3 offsetAtk;
+    [Header("攻擊範圍大小")]
+    public Vector3 sizeAtk;
     [Header("血量"), Range(100, 5000)]
     public float hp = 2500f;
 
@@ -24,7 +33,9 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D m_rigidbody2D;       // 2D 剛體
     private Animator m_animator;             // 動畫控制器
     private Player m_player; // Player腳本
+    private CameraCtrl2D m_cam;
     private float hpMax;
+    private float cdTimer;
 
     private void Start()
     {
@@ -32,8 +43,10 @@ public class Enemy : MonoBehaviour
         m_rigidbody2D = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
         m_player = FindObjectOfType<Player>(); // 用類型尋找物件 (小心場上同時有重複的類型，你會不知他抓到誰)
+        m_cam = FindObjectOfType<CameraCtrl2D>();
         hpMax = hp;
         textHp.text = hp.ToString();
+        cdTimer = 0;
     }
 
     private void Update()
@@ -43,6 +56,17 @@ public class Enemy : MonoBehaviour
             DoMove();
         }
 
+    }
+
+    /// <summary>
+    /// 在unity上繪製圖形 (玩家是看不到的)
+    /// </summary>
+    private void OnDrawGizmos()
+    {
+        // 調顏色
+        Gizmos.color = new Color(0, 1, 0, 0.5f);
+
+        Gizmos.DrawCube(transform.position + transform.right * offsetAtk.x + transform.up * offsetAtk.y, sizeAtk);
     }
 
     /// <summary>
@@ -63,7 +87,8 @@ public class Enemy : MonoBehaviour
 
         // 判斷與玩家距離
         float dis = Vector2.Distance(transform.position, m_player.transform.position);
-        if (dis > rangeAtk)
+        if (dis > 15f) ;
+        else if (dis > rangeAtk)
         {
             // 物理移動 方法二:往某座標移動 (同樣也會產生出加速度)
             m_rigidbody2D.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
@@ -84,7 +109,28 @@ public class Enemy : MonoBehaviour
     {
         // 停止往前
         m_rigidbody2D.velocity = Vector3.zero;
-        m_animator.SetTrigger("doAttack");
+        if (cdTimer < cdTimeAtk)
+        {
+            cdTimer += Time.deltaTime;
+        }
+        else
+        {
+            m_animator.SetTrigger("doAttack");
+            cdTimer = 0;
+            StartCoroutine(DelayAttack());
+        }
+
+    }
+
+    /// <summary>
+    /// 延遲後攻擊
+    /// </summary>
+    private IEnumerator DelayAttack()
+    {
+        yield return new WaitForSeconds(delayTimeAtk);
+        Collider2D hit = Physics2D.OverlapBox(transform.position + transform.right * offsetAtk.x + transform.up * offsetAtk.y, sizeAtk, 0, 1 << 9);
+        if (hit) m_player.OnInjury(atk);
+        StartCoroutine(m_cam.CamShake());
     }
 
     /// <summary>
@@ -115,4 +161,5 @@ public class Enemy : MonoBehaviour
         m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
         GetComponent<CapsuleCollider2D>().enabled = false;
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class CameraCtrl2D : MonoBehaviour
 {
@@ -8,6 +9,10 @@ public class CameraCtrl2D : MonoBehaviour
     public float speed = 3.5f;
     [Header("鏡頭距離")]
     public Vector3 offset;
+    [Header("鏡頭晃動間隔"), Range(0, 1)]
+    public float shakeInterval = 0.05f;
+    [Header("鏡頭晃動"), Range(0, 5)]
+    public float shakeValue = 0.5f;
 
     private Vector3 nextPos;
     private bool faceToRight = true; // 鏡頭右邊保留多一點
@@ -49,5 +54,16 @@ public class CameraCtrl2D : MonoBehaviour
         nextPos.z = transform.position.z;
 
         transform.position = nextPos;
+    }
+
+    public IEnumerator CamShake()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            transform.position += Vector3.up * shakeValue;
+            yield return new WaitForSeconds(shakeInterval);
+            transform.position -= Vector3.up * shakeValue;
+            yield return new WaitForSeconds(shakeInterval);
+        }
     }
 }

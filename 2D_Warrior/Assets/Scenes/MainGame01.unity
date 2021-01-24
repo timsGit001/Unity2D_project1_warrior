@@ -3376,7 +3376,7 @@ GameObject:
   - component: {fileID: 1509089100}
   - component: {fileID: 1509089099}
   - component: {fileID: 1509089101}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: warrior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3460,7 +3460,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1509089094}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -19.91, y: -23.02, z: 0}
+  m_LocalPosition: {x: -19.43, y: -23.01, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1206012139}
@@ -3485,6 +3485,8 @@ MonoBehaviour:
   hp: 100
   offset: {x: 0, y: -0.95, z: 0}
   radius: 0.2
+  textHp: {fileID: 1872037275}
+  imgHp: {fileID: 49206386}
   bullet: {fileID: 1494704562494830481, guid: f8ab0d8711988b3458c327d4803061a4, type: 3}
   bulletBirthLoc: {fileID: 1206012139}
   bulletSpeed: 3000
@@ -3797,6 +3799,8 @@ MonoBehaviour:
   target: {fileID: 1509089097}
   speed: 20
   offset: {x: 5.5, y: 1.8, z: 0}
+  shakeInterval: 0.05
+  shakeValue: 0.5
 --- !u!1 &1674027530
 GameObject:
   m_ObjectHideFlags: 0
@@ -23033,7 +23037,7 @@ Rigidbody2D:
   m_LinearDrag: 3
   m_AngularDrag: 0.05
   m_GravityScale: 5
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: e628be9c8ef999c429cd659d0cba0a38, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -23247,8 +23251,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  atk: 20
+  atk: 30
   rangeAtk: 2
+  delayTimeAtk: 0.7
+  cdTimeAtk: 1.47
+  offsetAtk: {x: 1.5, y: -0.18, z: 0}
+  sizeAtk: {x: 2.5, y: 2.6, z: 0}
   hp: 2500
   textHp: {fileID: 2054403946}
   imgHp: {fileID: 1092826161}

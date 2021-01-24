@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class Player : MonoBehaviour
     public Vector3 offset;
     [Header("Gizmos Radius")]
     public float radius;
+
+    [Header("血量值")]
+    public Text textHp;
+    [Header("血量圖片")]
+    public Image imgHp;
 
     // 武器相關
     [Header("子彈"), Tooltip("請提供子彈物件")]
@@ -38,6 +44,7 @@ public class Player : MonoBehaviour
     private Animator m_animator;             // 動畫控制器
     private float h; // 水平控制量值
     private int combo = 0; // 幾連斬
+    private float hpMax;
     #endregion
 
     #region 角色基本功能
@@ -144,18 +151,28 @@ public class Player : MonoBehaviour
     /// 受傷
     /// </summary>
     /// <param name="damage">受傷量</param>
-    private void OnInjury(float damage)
+    public void OnInjury(float damage)
     {
+        hp -= damage;
 
+        // 受傷
+        if (hp <= 0.0f) OnDeath(); // 死亡
+
+        textHp.text = hp.ToString();
+        imgHp.fillAmount = hp / hpMax;
     }
 
     /// <summary>
     /// 死亡
     /// </summary>
     /// <param name="objName">碰撞到的物件名</param>
-    private void OnDeath(GameObject objName)
+    private void OnDeath()
     {
-
+        hp = 0.0f;
+        m_animator.SetBool("dieSwitch", true);
+        m_rigidbody2D.Sleep();
+        m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
+        GetComponent<CapsuleCollider2D>().enabled = false;
     }
     #endregion
 
@@ -165,11 +182,15 @@ public class Player : MonoBehaviour
         m_rigidbody2D = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
         m_audioSource = GetComponent<AudioSource>();
+        hpMax = hp;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (hp <= 0.0f)
+            return;
+
         GetHorizontal();
         DoMove();
         DoJump();
