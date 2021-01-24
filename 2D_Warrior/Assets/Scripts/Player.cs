@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     public Transform bulletBirthLoc; // 子彈生成點
     [Range(0, 5000)]
     public int bulletSpeed = 800;    // 子彈速度
+    [Range(0, 5000)]
+    public float bulletDamage = 80;    // 子彈傷害
     [Header("開槍音效"), Tooltip("請提供開槍音效")]
     public AudioClip shootAudio;     // 開槍音效
     [Header("鑰匙音效"), Tooltip("請提供鑰匙音效")]
@@ -68,7 +70,7 @@ public class Player : MonoBehaviour
     /// </summary>
     private void DoMove()
     {
-        // 物理移動
+        // 物理移動 方法一:給某方向加速度
         m_rigidbody2D.velocity = new Vector2(h * moveSpeed, m_rigidbody2D.velocity.y);
 
         // 移動動畫
@@ -128,6 +130,7 @@ public class Player : MonoBehaviour
                 // 生成
                 GameObject temp = Instantiate(bullet, bulletBirthLoc.position, bulletBirthLoc.rotation);
                 temp.GetComponent<Rigidbody2D>().AddForce(bulletBirthLoc.right * bulletSpeed + bulletBirthLoc.up * 50);
+                temp.AddComponent<Bullet>().atk = bulletDamage;
             }
         }
         else if (Input.GetKeyDown(KeyCode.Mouse1))

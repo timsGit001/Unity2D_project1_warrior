@@ -13,5 +13,7 @@ public class Bullet : MonoBehaviour
             // 讓它受到 傷害
             target.OnInjury(atk);
         }
+
+        Destroy(gameObject);
     }
 }
