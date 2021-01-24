@@ -3460,7 +3460,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1509089094}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -19.78, y: -22.32, z: 0}
+  m_LocalPosition: {x: -19.91, y: -23.02, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1206012139}
@@ -23032,12 +23032,12 @@ Rigidbody2D:
   m_Mass: 500
   m_LinearDrag: 3
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 6
+  m_Constraints: 4
 --- !u!70 &1695231810
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -23132,7 +23132,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695231808}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -27.39, y: -22.6, z: 0}
+  m_LocalPosition: {x: -27.43, y: -22.57, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -23248,7 +23248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 2
   atk: 20
-  rangeAtk: 10
+  rangeAtk: 2
   hp: 2500
   textHp: {fileID: 2054403946}
   imgHp: {fileID: 1092826161}

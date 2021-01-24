@@ -10,8 +10,8 @@ public class Enemy : MonoBehaviour
     public float speed = 100f;
     [Header("攻擊力"), Range(0, 500)]
     public float atk = 20f;
-    [Header("攻擊範圍"), Range(0, 500)]
-    public float rangeAtk = 10f;
+    [Header("攻擊範圍"), Range(0, 50)]
+    public float rangeAtk = 3f;
     [Header("血量"), Range(100, 5000)]
     public float hp = 2500f;
 
@@ -38,10 +38,11 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (hp > 0) {
+        if (hp > 0)
+        {
             DoMove();
         }
-        
+
     }
 
     /// <summary>
@@ -60,11 +61,30 @@ public class Enemy : MonoBehaviour
             direction = -1.0f;
         }
 
-        // 物理移動 方法二:往某座標移動 (同樣也會產生出加速度)
-        m_rigidbody2D.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
+        // 判斷與玩家距離
+        float dis = Vector2.Distance(transform.position, m_player.transform.position);
+        if (dis > rangeAtk)
+        {
+            // 物理移動 方法二:往某座標移動 (同樣也會產生出加速度)
+            m_rigidbody2D.MovePosition(transform.position + transform.right * speed * Time.deltaTime);
+        }
+        else
+        {
+            DoAttack();
+        }
 
         // 移動動畫 (判斷是否有加速度)
         m_animator.SetBool("walkSwitch", m_rigidbody2D.velocity.magnitude > 0);
+    }
+
+    /// <summary>
+    /// 攻擊
+    /// </summary>
+    private void DoAttack()
+    {
+        // 停止往前
+        m_rigidbody2D.velocity = Vector3.zero;
+        m_animator.SetTrigger("doAttack");
     }
 
     /// <summary>
@@ -91,6 +111,8 @@ public class Enemy : MonoBehaviour
     {
         hp = 0.0f;
         m_animator.SetBool("dieSwitch", true);
+        m_rigidbody2D.Sleep();
+        m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
         GetComponent<CapsuleCollider2D>().enabled = false;
     }
 }
