@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
@@ -42,6 +43,7 @@ public class Player : MonoBehaviour
     private AudioSource m_audioSource;       // 音效來源
     private Rigidbody2D m_rigidbody2D;       // 2D 剛體
     private Animator m_animator;             // 動畫控制器
+    private SpriteRenderer m_sr;             // 圖片
     private float h; // 水平控制量值
     private int combo = 0; // 幾連斬
     private float hpMax;
@@ -107,7 +109,7 @@ public class Player : MonoBehaviour
         // [是否接觸地板]
         // 取 以角色pos+offset為中心 半徑為1.0的圓形 與 第8層Layer(目前是設為地板的Layer)的碰撞
         Collider2D hit = Physics2D.OverlapCircle(transform.position + offset, radius, 1 << 8);
-        isOnFloor = (hit!=null);
+        isOnFloor = (hit != null);
 
         // 設定動畫參數
         m_animator.SetFloat("jumping", m_rigidbody2D.velocity.y);
@@ -128,6 +130,12 @@ public class Player : MonoBehaviour
             }
             else
             {
+                // 第0層 取得目前執行的動畫資訊
+                AnimatorStateInfo info = m_animator.GetCurrentAnimatorStateInfo(0);
+                // 如果正在 攻擊 或 受傷 => 不移動
+                //if (info.IsName("warrior_attack1") && combo) return;
+
+
                 // 觸發 攻擊
                 m_animator.SetInteger("attackCombo", combo++);
                 m_animator.SetTrigger("doAttack");
@@ -156,10 +164,33 @@ public class Player : MonoBehaviour
         hp -= damage;
 
         // 受傷
-        if (hp <= 0.0f) OnDeath(); // 死亡
+        if (hp <= 0.0f)
+        {
+            OnDeath(); // 死亡
+        }
+        else
+        {
+            StartCoroutine(InjuryEffect());
+        }
 
         textHp.text = hp.ToString();
         imgHp.fillAmount = hp / hpMax;
+    }
+
+    /// <summary>
+    /// 受傷效果
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator InjuryEffect()
+    {
+        Color red = new Color(1.0f, 0.1f, 0.1f);
+        for (int i = 0; i < 5; i++)
+        {
+            m_sr.color = red;
+            yield return new WaitForSeconds(0.1f);
+            m_sr.color = Color.white;
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     /// <summary>
@@ -171,7 +202,7 @@ public class Player : MonoBehaviour
         hp = 0.0f;
         m_animator.SetBool("dieSwitch", true);
         enabled = false;
-        //m_rigidbody2D.Sleep();
+        m_rigidbody2D.Sleep();
         //m_rigidbody2D.constraints = RigidbodyConstraints2D.FreezeAll;
         //GetComponent<CapsuleCollider2D>().enabled = false;
     }
@@ -183,6 +214,7 @@ public class Player : MonoBehaviour
         m_rigidbody2D = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
         m_audioSource = GetComponent<AudioSource>();
+        m_sr = GetComponent<SpriteRenderer>();
         hpMax = hp;
     }
 

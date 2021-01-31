@@ -65,10 +65,15 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void OnDrawGizmos()
     {
+        // 畫出 武器有效碰撞範圍
         // 調顏色
         Gizmos.color = new Color(0, 1, 0, 0.5f);
-
         Gizmos.DrawCube(transform.position + transform.right * offsetAtk.x + transform.up * offsetAtk.y, sizeAtk);
+
+        // 畫出 骷髏進入攻擊之範圍
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawSphere(transform.position, rangeAtk);
+
     }
 
     /// <summary>
@@ -76,6 +81,12 @@ public class Enemy : MonoBehaviour
     /// </summary>
     private void DoMove()
     {
+        // 第0層 取得目前執行的動畫資訊
+        AnimatorStateInfo info = m_animator.GetCurrentAnimatorStateInfo(0);
+        // 如果正在 攻擊 或 受傷 => 不移動
+        if (info.IsName("skeleton_attack") || info.IsName("skeleton_hurt")) return;
+
+
         float direction = 1.0f; // 正:往右 負:往左
         // 面向玩家處理
         // transform.eulerAngles = (transform.position.x < m_player.transform.position.x) ? Vector3.zero : new Vector3(0, 180, 0);
@@ -146,6 +157,7 @@ public class Enemy : MonoBehaviour
         m_animator.SetTrigger("onHurt");
 
         if (hp <= 0.0f) OnDeath(); // 死亡
+        else if (hp <= hpMax*0.8) rangeAtk = 8f; // 進入第二段模式
 
         textHp.text = hp.ToString();
         imgHp.fillAmount = hp / hpMax;
