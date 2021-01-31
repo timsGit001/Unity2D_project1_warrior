@@ -38,6 +38,8 @@ public class Player : MonoBehaviour
     public AudioClip shootAudio;     // 開槍音效
     [Header("鑰匙音效"), Tooltip("請提供鑰匙音效")]
     public AudioClip getKeyAudio;     // 鑰匙音效
+    [Header("遊戲結束")]
+    public GameObject gg;
 
     /* 私人 設定 */
     private AudioSource m_audioSource;       // 音效來源
@@ -199,6 +201,8 @@ public class Player : MonoBehaviour
     /// <param name="objName">碰撞到的物件名</param>
     private void OnDeath()
     {
+        gg.SetActive(true);
+
         hp = 0.0f;
         m_animator.SetBool("dieSwitch", true);
         enabled = false;

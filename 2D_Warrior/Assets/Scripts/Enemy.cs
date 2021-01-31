@@ -40,6 +40,8 @@ public class Enemy : MonoBehaviour
     private CameraCtrl2D m_cam;
     private float hpMax;
     private float cdTimer;
+    private bool isSecond;
+    private ParticleSystem psSecond;
 
     private void Start()
     {
@@ -48,6 +50,7 @@ public class Enemy : MonoBehaviour
         m_animator = GetComponent<Animator>();
         m_player = FindObjectOfType<Player>(); // 用類型尋找物件 (小心場上同時有重複的類型，你會不知他抓到誰)
         m_cam = FindObjectOfType<CameraCtrl2D>();
+        psSecond = GameObject.Find("Boss_2nd_Atk").GetComponent<ParticleSystem>();
         hpMax = hp;
         textHp.text = hp.ToString();
         cdTimer = 0;
@@ -132,6 +135,7 @@ public class Enemy : MonoBehaviour
             cdTimer = 0;
             StartCoroutine(DelayAttack());
         }
+
     }
 
     /// <summary>
@@ -142,6 +146,10 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(delayTimeAtk);
         Collider2D hit = Physics2D.OverlapBox(transform.position + transform.right * offsetAtk.x + transform.up * offsetAtk.y, sizeAtk, 0, 1 << 9);
         if (hit) m_player.OnInjury(atk);
+
+        if (isSecond)
+            psSecond.Play();
+
         StartCoroutine(m_cam.CamShake());
     }
 
@@ -157,7 +165,11 @@ public class Enemy : MonoBehaviour
         m_animator.SetTrigger("onHurt");
 
         if (hp <= 0.0f) OnDeath(); // 死亡
-        else if (hp <= hpMax*0.8) rangeAtk = 8f; // 進入第二段模式
+        else if (hp <= hpMax * 0.8)
+        {
+            rangeAtk = 8f; // 進入第二段模式
+            isSecond = true;
+        }
 
         textHp.text = hp.ToString();
         imgHp.fillAmount = hp / hpMax;
