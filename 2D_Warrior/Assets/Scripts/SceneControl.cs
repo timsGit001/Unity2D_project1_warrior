@@ -29,6 +29,7 @@ public class SceneControl : MonoBehaviour
     }
     public void BackMenu()
     {
+        Time.timeScale = 1.0f;
         aud.PlayOneShot(btnClipSound);
         Invoke("delayBackMenu", 0.5f);
     }
@@ -38,6 +39,7 @@ public class SceneControl : MonoBehaviour
     }
     public void LeaveGame()
     {
+        Time.timeScale = 1.0f;
         aud.PlayOneShot(btnClipSound);
         //Invoke("delayLeaveGame", 0.5f);
 

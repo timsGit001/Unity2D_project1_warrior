@@ -134,20 +134,23 @@ public class Player : MonoBehaviour
             {
                 // 第0層 取得目前執行的動畫資訊
                 AnimatorStateInfo info = m_animator.GetCurrentAnimatorStateInfo(0);
-                // 如果正在 攻擊 或 受傷 => 不移動
-                //if (info.IsName("warrior_attack1") && combo) return;
-
-
-                // 觸發 攻擊
-                m_animator.SetInteger("attackCombo", combo++);
-                m_animator.SetTrigger("doAttack");
-
-                // 音效
-                m_audioSource.PlayOneShot(shootAudio, 1.5f);
-                // 生成
-                GameObject temp = Instantiate(bullet, bulletBirthLoc.position, bulletBirthLoc.rotation);
-                temp.GetComponent<Rigidbody2D>().AddForce(bulletBirthLoc.right * bulletSpeed + bulletBirthLoc.up * 50);
-                temp.AddComponent<Bullet>().atk = bulletDamage;
+                // 如果正在 攻擊 =>  
+                if (combo == 0)
+                {
+                    Shooting(1);
+                }
+                else if (info.IsName("warrior_attack1") && combo == 1)
+                {
+                    Shooting(2);
+                }
+                else if (info.IsName("warrior_attack2") && combo == 2)
+                {
+                    Shooting(3);
+                }
+                else if (!info.IsName("warrior_attack1") ||
+                         !info.IsName("warrior_attack2") ||
+                         !info.IsName("warrior_attack3"))
+                    combo = 0;
             }
         }
         else if (Input.GetKeyDown(KeyCode.Mouse1))
@@ -156,6 +159,22 @@ public class Player : MonoBehaviour
             m_animator.SetBool("equipSwd", false);
 
         }
+    }
+
+    private void Shooting(float lv)
+    {
+        // 觸發 攻擊
+        m_animator.SetInteger("attackCombo", combo++);
+        m_animator.SetTrigger("doAttack");
+        // 音效
+        m_audioSource.PlayOneShot(shootAudio, 1.5f);
+        // 生成
+        GameObject temp = Instantiate(bullet, bulletBirthLoc.position, bulletBirthLoc.rotation);
+        temp.GetComponent<Rigidbody2D>().AddForce(bulletBirthLoc.right * bulletSpeed + bulletBirthLoc.up * 50);
+        temp.AddComponent<Bullet>().atk = bulletDamage * lv;
+
+        print(temp.AddComponent<Bullet>().atk);
+
     }
     /// <summary>
     /// 受傷

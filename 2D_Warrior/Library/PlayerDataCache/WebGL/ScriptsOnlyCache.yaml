@@ -2,6 +2,7 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - Boss2ndAtk
+    - BossTriger
     - CameraCtrl2D
     - Enemy
     - GameManager
@@ -18,6 +19,14 @@ ScriptsOnlyBuild:
     - UnityEditor.Tilemaps.TileDragAndDropManager
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
+    UnityEditor.Graphs.dll:
+    - UnityEditor.Graphs.AnimationBlendTree.Graph
+    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
+    - UnityEditor.Graphs.AnimationStateMachine.Graph
+    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
+    - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -84,37 +93,39 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11312}
     - Class: 114
-      Script: {instanceID: 11594}
+      Script: {instanceID: 11484}
     - Class: 114
-      Script: {instanceID: 11602}
+      Script: {instanceID: 11596}
     - Class: 114
-      Script: {instanceID: 11650}
+      Script: {instanceID: 11604}
     - Class: 114
-      Script: {instanceID: 11760}
+      Script: {instanceID: 11652}
     - Class: 114
-      Script: {instanceID: 12148}
+      Script: {instanceID: 11762}
     - Class: 114
-      Script: {instanceID: 12180}
+      Script: {instanceID: 12150}
     - Class: 114
-      Script: {instanceID: 12306}
+      Script: {instanceID: 12182}
     - Class: 114
-      Script: {instanceID: 12432}
+      Script: {instanceID: 12308}
     - Class: 114
-      Script: {instanceID: 12802}
+      Script: {instanceID: 12434}
     - Class: 114
-      Script: {instanceID: 12904}
+      Script: {instanceID: 12804}
     - Class: 114
-      Script: {instanceID: 12980}
+      Script: {instanceID: 12906}
     - Class: 114
-      Script: {instanceID: 13456}
+      Script: {instanceID: 12982}
     - Class: 114
-      Script: {instanceID: 13878}
+      Script: {instanceID: 13458}
     - Class: 114
-      Script: {instanceID: 13972}
+      Script: {instanceID: 13880}
     - Class: 114
-      Script: {instanceID: 14012}
+      Script: {instanceID: 13974}
     - Class: 114
-      Script: {instanceID: 17976}
+      Script: {instanceID: 14014}
+    - Class: 114
+      Script: {instanceID: 17146}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -187,21 +198,21 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 11312}
     - Class: 114
-      Script: {instanceID: 11594}
+      Script: {instanceID: 11596}
     - Class: 114
-      Script: {instanceID: 11602}
+      Script: {instanceID: 11604}
     - Class: 114
-      Script: {instanceID: 12076}
+      Script: {instanceID: 12078}
     - Class: 114
-      Script: {instanceID: 12180}
+      Script: {instanceID: 12182}
     - Class: 114
-      Script: {instanceID: 12802}
+      Script: {instanceID: 12804}
     - Class: 114
-      Script: {instanceID: 13456}
+      Script: {instanceID: 13458}
     - Class: 114
-      Script: {instanceID: 13878}
+      Script: {instanceID: 13880}
     - Class: 114
-      Script: {instanceID: 13972}
+      Script: {instanceID: 13974}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -281,6 +292,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.TestRunner.dll
     namespaceName: UnityEngine.TestTools.TestRunner.Callbacks
     className: PlayerQuitHandler
+  - hash:
+      serializedVersion: 2
+      Hash: b9383e5cfb60b76cf7f27a138d6e90c7
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: TeleportManager
   - hash:
       serializedVersion: 2
       Hash: 04e4a8b0447477cc4e933d9e5311188f
@@ -901,12 +918,12 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   - hash:
       serializedVersion: 2
-      Hash: b9383e5cfb60b76cf7f27a138d6e90c7
+      Hash: 42c56e9adfda3a851230052611625936
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: TeleportManager
+    className: BossTriger
   platform: 20
   scenePathNames:
   - Assets/Scenes/Menu.unity
   - Assets/Scenes/MainGame01.unity
-  playerPath: E:/Unity/2DWarrior/Web
+  playerPath: E:/Unity/2DWarrior/Unity2D_project1_warrior/Web

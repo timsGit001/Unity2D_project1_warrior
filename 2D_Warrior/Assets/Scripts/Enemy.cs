@@ -165,7 +165,7 @@ public class Enemy : MonoBehaviour
         m_animator.SetTrigger("onHurt");
 
         if (hp <= 0.0f) OnDeath(); // 死亡
-        else if (hp <= hpMax * 0.8)
+        else if (hp <= hpMax * 0.5)
         {
             rangeAtk = 8f; // 進入第二段模式
             isSecond = true;
